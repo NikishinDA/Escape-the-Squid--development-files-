@@ -1,0 +1,84 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ChunkPlacerTEST : MonoBehaviour
+{
+    [SerializeField] private Transform _playerTransform;
+    [SerializeField] private Chunk _chunkPrefab;
+    [SerializeField] private Chunk _finalPrefab;
+    [SerializeField] private float _spawnDistance;
+    [SerializeField] private int _chunkNumber;
+    [SerializeField] private int _levelLength;
+    //[SerializeField] private int _levelLengthMultiplier;
+    //[SerializeField] private int _levelSpeedMultiplier;
+
+    [Header("Debug")]
+    [SerializeField] private Chunk firstChunk;
+    [SerializeField] private Chunk[] _chunks;
+    
+    private List<Chunk> _spawnedChunks;
+    private bool _finishSpawned = false;
+    private int _currentLength;
+
+    private void Awake()
+    {
+        _spawnedChunks = new List<Chunk>();
+        EventManager.AddListener<GameStartEvent>(OnGameStart);
+    }
+    private void OnDestroy()
+    {
+        EventManager.RemoveListener<GameStartEvent>(OnGameStart);
+    }
+    private void Start()
+    {
+        _currentLength = 0; //_firstPrefab.Length;
+        //foreach (Chunk ch in _firstPrefab)
+        //{
+            _spawnedChunks.Add(firstChunk);
+       // }*/
+    }
+
+    private void Update()
+    {
+        if ((!_finishSpawned) && (_playerTransform.position.z > _spawnedChunks[_spawnedChunks.Count - 1].End.position.z - _spawnDistance))
+        {
+            SpawnChunk();
+        }
+
+    }
+    private void SpawnChunk()
+    {
+        Chunk newChunk;
+       /* if (_currentLength < _levelLength)
+        {
+            newChunk = Instantiate(_chunkPrefab);
+        }
+        else
+        {
+            newChunk = Instantiate(_finalPrefab);
+            _finishSpawned = true;
+        }*/
+       if (_currentLength < _chunks.Length)
+            newChunk = _chunks[_currentLength];
+       else
+       {
+           gameObject.SetActive(false);
+           return;
+       }
+        newChunk.transform.position = _spawnedChunks[_spawnedChunks.Count - 1].End.position - newChunk.Begin.localPosition;
+        Vector3 newChunkPos = newChunk.transform.position;
+        newChunkPos.x = _playerTransform.position.x;
+        newChunk.transform.position = newChunkPos;
+        _spawnedChunks.Add(newChunk);
+        _currentLength++;
+       /* if (_spawnedChunks.Count > _chunkNumber)
+        {
+            Destroy(_spawnedChunks[0].gameObject);
+            _spawnedChunks.RemoveAt(0);
+        }*/
+    }
+    private void OnGameStart(GameStartEvent obj)
+    {
+        //_levelLength = obj.LevelSetLength;
+    }
+}
