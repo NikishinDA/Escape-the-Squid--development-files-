@@ -18,3 +18,9 @@ Used SDKs: FacebookSDK, GameAnalytics, Adjust.
 ---
 
 Preview:
+
+https://youtu.be/pymI7BvGV04
+
+![preview1](Previews/image_002_0000.jpg)
+![preview2](Previews/image_003_0000.jpg)
+![preview3](Previews/image_005_0000.jpg)
